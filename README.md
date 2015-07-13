@@ -3,8 +3,13 @@
 Backstretch is a simple jQuery plugin that allows you to add a dynamically-resized, slideshow-capable (with lazy-loading) background image to any page or element. The image will stretch to fit the page/element, and will automatically resize as the window/element size changes.
 ## Demo
 
-There are a couple of examples included with this package, or feel free to check it out live [on the project page itself](http://srobbin.com/jquery-plugins/backstretch/).
-(The lazy-loading example is only in this package for now.)
+Feel free to check out the live examples [on the original project page itself](http://srobbin.com/jquery-plugins/backstretch/).
+
+Further examples can be found within the repository package, which include:
+
+* lazy-loading
+* start slideshow at different index
+* offset positioning for x and y
 
 ## Setup
 
@@ -33,15 +38,15 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
-| `offsetX` | Accepts a number between 0 and 1. When 0, the image is offset all the way to the left. When 1, it's all the way to right. When .5, it's centered exactly in the middle. | Number | undefined |
-| `offsetY` | Same as offsetX, only it adjusts the offset along the Y axis. | Number | undefined |
+| `offsetX` | Accepts a number between 0 and 1. When 0, the image is offset all the way to the left. When 1, it's all the way to right. When .5, it's centered exactly in the middle.<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Number | undefined |
+| `offsetY` | Same as offsetX, only it adjusts the offset along the Y axis.<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Number | undefined |
 | `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
-| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* | Boolean | false |
-| `start` | The index of the image in the array you want to start your slideshow with. | Integer | 0 |
+| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* <br><small>Credit (null-null-null): [https://github.com/SpazzMarticus/jquery-backstretch](https://github.com/SpazzMarticus/jquery-backstretch)</small> | Boolean | false |
+| `start` | The index of the image in the array you want to start your slideshow with.<br><small>Credit (null-null-null): [https://github.com/SpazzMarticus/jquery-backstretch](https://github.com/SpazzMarticus/jquery-backstretch)</small> | Integer | 0 |
 
 ## Slideshow API
 
@@ -122,6 +127,10 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ```
 
 ## Changelog
+
+###Version 2.2
+* Added offset functionality
+
 
 ###Version 2.1
 * Added lazy-loading functionality

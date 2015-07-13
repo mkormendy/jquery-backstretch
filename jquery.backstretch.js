@@ -131,26 +131,23 @@
     /**
      * Start-Option (Index)
      */
-    if (this.options.start >= this.images.length)
-    {
+    if (this.options.start >= this.images.length) {
         this.options.start = this.images.length - 1;
     }
-    if (this.options.start < 0)
-    {
+    if (this.options.start < 0) {
         this.options.start = 0;
     }
     
     /**
      * Lazy-Loading
      */
-    if (options.lazyload && this.images[this.options.start])
-    {
+    if (options.lazyload && this.images[this.options.start]) {
         $('<img />')[0].src = this.images[this.options.start];
     }
     /**
      * Pre-Loading
      */
-    else{
+    else {
         $.each(this.images, function () {
             $('<img />')[0].src = this;
         });
@@ -190,9 +187,7 @@
     }
 
     // Fixed or absolute positioning?
-    this.$wrap.css({
-      position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute'
-    });
+    this.$wrap.css({ position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute' });
 
     // Set the first image
     this.index = this.options.start;
@@ -222,17 +217,19 @@
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset
             , wiggleRoom;
-	    // Fixes triggering of resize before image ratio is known (iOS 6 at least)
+            // Fixes triggering of resize before image ratio is known (iOS 6 at least)
             if (isNaN(bgHeight)) {
               return this;
             }
            
             // Make adjustments based on image ratio
+            console.log('this.options.offsetX: '+this.options.offsetX);
+            console.log('this.options.offsetY: '+this.options.offsetY);
             if (bgHeight >= rootHeight) {
-                if(this.options.centeredY) {
+                if (this.options.centeredY && typeof this.options.offsetY === 'undefined') {
                   bgOffset = (bgHeight - rootHeight) / 2;
                 }
-                else if(this.options.offsetY) {
+                else if (this.options.offsetY) {
                   wiggleRoom = rootHeight - this.$img.height;
                   bgOffset = wiggleRoom * this.options.offsetY;
                 }
@@ -242,15 +239,15 @@
             } else {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
-                if(this.options.centeredX) {
+                if (this.options.centeredX && typeof this.options.offsetX === 'undefined') {
                   bgOffset = (bgWidth - rootWidth) / 2;
                 }
-                else if(this.options.offsetX) {
+                else if (this.options.offsetX) {
                   wiggleRoom = rootWidth - this.$img.width;
                   bgOffset = wiggleRoom * this.options.offsetX;
                 }
                 if (bgOffset) {
-                  bgCSS.oeft = '-' + bgOffset + 'px';
+                  bgCSS.left = '-' + bgOffset + 'px';
                 }
             }
 
