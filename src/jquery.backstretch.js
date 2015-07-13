@@ -220,20 +220,33 @@
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
-            , bgOffset;
+            , bgOffset
+            , wiggleRoom;
 
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
                 if(this.options.centeredY) {
+                  bgOffset = (bgHeight - rootHeight) / 2;
+                }
+                else if(this.options.offsetY) {
+                  wiggleRoom = rootHeight - this.$img.height;
+                  bgOffset = wiggleRoom * this.options.offsetY;
+                }
+                if (bgOffset) {
                   bgCSS.top = '-' + bgOffset + 'px';
                 }
             } else {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
                 if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+                  bgOffset = (bgWidth - rootWidth) / 2;
+                }
+                else if(this.options.offsetX) {
+                  wiggleRoom = rootWidth - this.$img.width;
+                  bgOffset = wiggleRoom * this.options.offsetX;
+                }
+                if (bgOffset) {
+                  bgCSS.oeft = '-' + bgOffset + 'px';
                 }
             }
 

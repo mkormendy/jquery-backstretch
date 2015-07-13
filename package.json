@@ -22,6 +22,13 @@
       "url": "http://srobbin.com/jquery-plugins/backstretch//blob/master/LICENSE-MIT"
     }
   ],
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-concat": "^0.5.0",
+    "grunt-contrib-jshint": "^0.11.0",
+    "grunt-contrib-qunit": "^0.5.2",
+    "grunt-contrib-uglify": "^0.7.0"
+  },
   "dependencies": {
     "jquery": ">= 1.7"
   },

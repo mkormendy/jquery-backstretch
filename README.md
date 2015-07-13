@@ -33,6 +33,8 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 
 | Name | Description | Type | Default |
 |------|-------------|------|---------|
+| `offsetX` | Accepts a number between 0 and 1. When 0, the image is offset all the way to the left. When 1, it's all the way to right. When .5, it's centered exactly in the middle. | Number | undefined |
+| `offsetY` | Same as offsetX, only it adjusts the offset along the Y axis. | Number | undefined |
 | `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
