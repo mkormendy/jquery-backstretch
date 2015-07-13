@@ -218,11 +218,15 @@
             , landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
             , rootWidth = this.isBody ? (isMobile ? (landscape ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
-            , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
+            , rootHeight = this.isBody ? (isMobile ? (landscape ? screen.width : screen.height) : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
             , bgOffset
             , wiggleRoom;
-
+	    // Fixes triggering of resize before image ratio is known (iOS 6 at least)
+            if (isNaN(bgHeight)) {
+              return this;
+            }
+           
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
                 if(this.options.centeredY) {
@@ -423,5 +427,7 @@
       (ieversion && ieversion <= 6)
     );
   }());
+
+  var isMobile = navigator.userAgent.match(/Mobi/i);
 
 }(jQuery, window));
