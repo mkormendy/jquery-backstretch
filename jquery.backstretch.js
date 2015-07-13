@@ -1,6 +1,10 @@
-/*! Backstretch - v2.1.0 - 2014-11-14
-* http://srobbin.com/jquery-plugins/backstretch/
-* Copyright (c) 2014 Scott Robbin; Licensed MIT */
+/*
+ * Backstretch
+ * http://srobbin.com/jquery-plugins/backstretch/
+ *
+ * Copyright (c) 2013 Scott Robbin
+ * Licensed under the MIT license.
+ */
 
 ;(function ($, window, undefined) {
   'use strict';
@@ -211,24 +215,38 @@
       resize: function () {
         try {
           var bgCSS = {left: 0, top: 0}
-            , rootWidth = this.isBody ? this.$root.width() : this.$root.innerWidth()
+            , landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
+            , rootWidth = this.isBody ? (isMobile ? (landscape ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
             , bgWidth = rootWidth
             , rootHeight = this.isBody ? ( window.innerHeight ? window.innerHeight : this.$root.height() ) : this.$root.innerHeight()
             , bgHeight = bgWidth / this.$img.data('ratio')
-            , bgOffset;
+            , bgOffset
+            , wiggleRoom;
 
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
-                bgOffset = (bgHeight - rootHeight) / 2;
                 if(this.options.centeredY) {
+                  bgOffset = (bgHeight - rootHeight) / 2;
+                }
+                else if(this.options.offsetY) {
+                  wiggleRoom = rootHeight - this.$img.height;
+                  bgOffset = wiggleRoom * this.options.offsetY;
+                }
+                if (bgOffset) {
                   bgCSS.top = '-' + bgOffset + 'px';
                 }
             } else {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
-                bgOffset = (bgWidth - rootWidth) / 2;
                 if(this.options.centeredX) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+                  bgOffset = (bgWidth - rootWidth) / 2;
+                }
+                else if(this.options.offsetX) {
+                  wiggleRoom = rootWidth - this.$img.width;
+                  bgOffset = wiggleRoom * this.options.offsetX;
+                }
+                if (bgOffset) {
+                  bgCSS.oeft = '-' + bgOffset + 'px';
                 }
             }
 
