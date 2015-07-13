@@ -223,8 +223,6 @@
             }
            
             // Make adjustments based on image ratio
-            console.log('this.options.offsetX: '+this.options.offsetX);
-            console.log('this.options.offsetY: '+this.options.offsetY);
             if (bgHeight >= rootHeight) {
                 if (this.options.centeredY && typeof this.options.offsetY === 'undefined') {
                   bgOffset = (bgHeight - rootHeight) / 2;
