@@ -25,13 +25,14 @@
     <body>
         <div class="container">
             <h1>Slideshow Demo (with offset)</h1>
-            <p>This demonstrates how to use a Backstretch slideshow and offsetting the image.</p>
+            <p>This demonstrates how to use a Backstretch slideshow and offsetting the image. In this case, the image should fill and "stick" from the bottom right of the page (or element if used).</p>
             <pre>&lt;script src=&quot;//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;jquery.backstretch.min.js&quot;&gt;&lt;/script&gt;
 &lt;script&gt;
     $.backstretch([
       &quot;dome.jpg&quot;
       ], {
+        offsetX: 0.9,
         offsetY: 0.9
     });
 &lt;/script&gt;</pre>
@@ -42,6 +43,7 @@
             $.backstretch([
                 "dome.jpg"
             ], {
+                offsetX: 0.9,
                 offsetY: 0.9
             });
         </script>
