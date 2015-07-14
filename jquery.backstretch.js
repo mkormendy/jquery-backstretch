@@ -224,6 +224,7 @@
            
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
+            	// Don't offset if 
                 if (this.options.centeredY && typeof this.options.offsetY === 'undefined') {
                   bgOffset = (bgHeight - rootHeight) / 2;
                 }

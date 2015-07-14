@@ -71,6 +71,8 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
+  //  offsetX // leave as undefined
+  //  offsetY // leave as undefined
       centeredX: true   // Should we center the image on the X axis?
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
@@ -223,33 +225,49 @@
             }
            
             // Make adjustments based on image ratio
-            console.log('this.options.offsetX: '+this.options.offsetX);
-            console.log('this.options.offsetY: '+this.options.offsetY);
+/*//////////*/console.log('this.$img.data("ratio"): '+this.$img.data('ratio'));
+/*//////////*/console.log('this.$img.height(): '+this.$img.height());
+/*//////////*/console.log('this.$img.width(): '+this.$img.width());
+/*//////////*/console.log('this.options.offsetX: '+this.options.offsetX);
+/*//////////*/console.log('this.options.offsetY: '+this.options.offsetY);
+/*//////////*/console.log('bgHeight: '+bgHeight);
+/*//////////*/console.log('rootHeight: '+rootHeight);
             if (bgHeight >= rootHeight) {
                 if (this.options.centeredY && typeof this.options.offsetY === 'undefined') {
                   bgOffset = (bgHeight - rootHeight) / 2;
+/*//////////*/console.log('bgOffset centeredY: '+bgOffset);
                 }
                 else if (this.options.offsetY) {
-                  wiggleRoom = rootHeight - this.$img.height;
-                  bgOffset = wiggleRoom * this.options.offsetY;
+                  wiggleRoom = rootHeight - bgHeight;
+/*//////////*/console.log('wiggleRoom: '+wiggleRoom);
+                  bgOffset = 0 - wiggleRoom * this.options.offsetY;
+/*//////////*/console.log('bgOffset (y): '+bgOffset);
                 }
                 if (bgOffset) {
-                  bgCSS.top = '-' + bgOffset + 'px';
+/*//////////*/console.log('bgCSS.top (y): '+bgCSS.top);
+                  bgCSS.top = 0 - bgOffset + 'px';
+/*//////////*/console.log('bgCSS.top after (y): '+bgCSS.top);
                 }
             } else {
                 bgHeight = rootHeight;
                 bgWidth = bgHeight * this.$img.data('ratio');
                 if (this.options.centeredX && typeof this.options.offsetX === 'undefined') {
                   bgOffset = (bgWidth - rootWidth) / 2;
+/*//////////*/console.log('bgOffset centeredX: '+bgOffset);
                 }
                 else if (this.options.offsetX) {
-                  wiggleRoom = rootWidth - this.$img.width;
-                  bgOffset = wiggleRoom * this.options.offsetX;
+                  wiggleRoom = rootWidth - bgWidth;
+/*//////////*/console.log('wiggleRoom: '+wiggleRoom);
+                  bgOffset = 0 - wiggleRoom * this.options.offsetX;
+/*//////////*/console.log('bgOffset (x): '+bgOffset);
                 }
                 if (bgOffset) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+/*//////////*/console.log('bgCSS.left (x): '+bgCSS.left);
+                  bgCSS.left = 0 - bgOffset + 'px';
+/*//////////*/console.log('bgCSS.left after (x): '+bgCSS.left);
                 }
             }
+/*//////////*/console.log('=======');
 
             this.$wrap.css({width: rootWidth, height: rootHeight})
                       .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
