@@ -4,6 +4,18 @@
  *
  * Copyright (c) 2013 Scott Robbin
  * Licensed under the MIT license.
+ *
+ * Fork Maintained By:
+ * Mike Kormendy
+ * https://github.com/mkormendy/jquery-backstretch
+ * http://mikekormendy.com
+ * http://somethinginteractive.com
+ *
+ * Caption Support:
+ * Sebastian Sulinski
+ * https://github.com/sebastiansulinski/jquery-backstretch
+ * http://ssdtutorials.com
+ *
  */
 
 ;(function ($, window, undefined) {
@@ -71,6 +83,8 @@
    * ========================= */
 
   $.fn.backstretch.defaults = {
+  //  offsetX // leave as undefined
+  //  offsetY // leave as undefined
       centeredX: true   // Should we center the image on the X axis?
     , centeredY: true   // Should we center the image on the Y axis?
     , duration: 5000    // Amount of time in between slides (if slideshow)
@@ -78,6 +92,10 @@
     , paused: false   // Whether the images should slide after given duration
     , lazyload: false // Should the images be lazy loaded?
     , start: 0      // Index of the first image to show
+    , captionAppendTo: 'body'
+    , dataCaption: 'bootstrap-image'
+    , dataCaptionIndexSeparator: '_'
+    , captionHideClass: 'hide'
   };
 
   /* STYLES
@@ -116,45 +134,70 @@
   var Backstretch = function (container, images, options) {
     this.options = $.extend({}, $.fn.backstretch.defaults, options || {});
 
+    /**
+     *  share access to the object instance from within other functions/methods
+     */ 
+    var self = this;
+
     /* In its simplest form, we allow Backstretch to be called on an image path.
      * e.g. $.backstretch('/path/to/image.jpg')
      * So, we need to turn this back into an array.
      */
-    this.images = $.isArray(images) ? images : [images];
+    self.images = $.isArray(images) ? images : [images];
 
     /**
      * Paused-Option
      */
-    if (this.options.paused) {
-        this.paused = true;
+    if (self.options.paused) {
+        self.paused = true;
     }
     /**
      * Start-Option (Index)
      */
-    if (this.options.start >= this.images.length) {
-        this.options.start = this.images.length - 1;
+    if (self.options.start >= self.images.length) {
+        self.options.start = self.images.length - 1;
     }
-    if (this.options.start < 0) {
-        this.options.start = 0;
+    if (self.options.start < 0) {
+        self.options.start = 0;
     }
     
     /**
      * Lazy-Loading
      */
-    if (options.lazyload && this.images[this.options.start]) {
-        $('<img />')[0].src = this.images[this.options.start];
+    if (options.lazyload && self.images[self.options.start]) {
+        $.each(self.images, function (key, value) {
+            if (!self.imagesContainCaption()) {
+                $('<img />')[0].src = self.images[self.options.start];
+            } else {
+                $('<img />')[0].src = self.images[self.options.start].src;
+                self.appendCaption(
+                    key,
+                    value.src,
+                    value.caption
+                );
+            }
+        });
     }
     /**
      * Pre-Loading
      */
     else {
-        $.each(this.images, function () {
-            $('<img />')[0].src = this;
+        $.each(self.images, function (key, value) {
+            if (!self.imagesContainCaption()) {
+                $('<img />')[0].src = this;
+            } else {
+                $('<img />')[0].src = value.src;
+                self.appendCaption(
+                    key,
+                    value.src,
+                    value.caption
+                );
+            }
         });
     }
 
     // Convenience reference to know if the container is body.
-    this.isBody = container === document.body;
+    self.isBody = container === document.body;
 
     /* We're keeping track of a few different elements
      *
@@ -162,46 +205,48 @@
      * Wrap: a DIV that we place the image into, so we can hide the overflow.
      * Root: Convenience reference to help calculate the correct height.
      */
-    this.$container = $(container);
-    this.$root = this.isBody ? supportsFixedPosition ? $(window) : $(document) : this.$container;
+    self.$container = $(container);
+    self.$root = self.isBody ? supportsFixedPosition ? $(window) : $(document) : self.$container;
 
     // Don't create a new wrap if one already exists (from a previous instance of Backstretch)
-    var $existing = this.$container.children(".backstretch").first();
-    this.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(this.$container);
+    var $existing = self.$container.children(".backstretch").first();
+    self.$wrap = $existing.length ? $existing : $('<div class="backstretch"></div>').css(styles.wrap).appendTo(self.$container);
 
     // Non-body elements need some style adjustments
-    if (!this.isBody) {
+    if (!self.isBody) {
       // If the container is statically positioned, we need to make it relative,
       // and if no zIndex is defined, we should set it to zero.
-      var position = this.$container.css('position')
-        , zIndex = this.$container.css('zIndex');
+      var position = self.$container.css('position')
+          , zIndex = self.$container.css('zIndex');
 
-      this.$container.css({
+      self.$container.css({
           position: position === 'static' ? 'relative' : position
         , zIndex: zIndex === 'auto' ? 0 : zIndex
         , background: 'none'
       });
       
       // Needs a higher z-index
-      this.$wrap.css({zIndex: -999998});
+      self.$wrap.css({zIndex: -999998});
     }
 
     // Fixed or absolute positioning?
-    this.$wrap.css({ position: this.isBody && supportsFixedPosition ? 'fixed' : 'absolute' });
+    self.$wrap.css({
+        position: self.isBody && supportsFixedPosition ? 'fixed' : 'absolute'
+    });
 
     // Set the first image
-    this.index = this.options.start;
-    this.show(this.index);
+    self.index = self.options.start;
+    self.show(self.index);
 
     // Listen for resize
-    $(window).on('resize.backstretch', $.proxy(this.resize, this))
+    $(window).on('resize.backstretch', $.proxy(self.resize, self))
              .on('orientationchange.backstretch', $.proxy(function () {
                 // Need to do this in order to get the right window height
-                if (this.isBody && window.pageYOffset === 0) {
+                if (self.isBody && window.pageYOffset === 0) {
                   window.scrollTo(0, 1);
-                  this.resize();
+                  self.resize();
                 }
-             }, this));
+             }, self));
   };
 
   /* PUBLIC METHODS
@@ -224,16 +269,15 @@
            
             // Make adjustments based on image ratio
             if (bgHeight >= rootHeight) {
-            	// Don't offset if 
                 if (this.options.centeredY && typeof this.options.offsetY === 'undefined') {
                   bgOffset = (bgHeight - rootHeight) / 2;
                 }
                 else if (this.options.offsetY) {
-                  wiggleRoom = rootHeight - this.$img.height;
-                  bgOffset = wiggleRoom * this.options.offsetY;
+                  wiggleRoom = rootHeight - bgHeight;
+                  bgOffset = 0 - wiggleRoom * this.options.offsetY;
                 }
                 if (bgOffset) {
-                  bgCSS.top = '-' + bgOffset + 'px';
+                  bgCSS.top = 0 - bgOffset + 'px';
                 }
             } else {
                 bgHeight = rootHeight;
@@ -242,11 +286,11 @@
                   bgOffset = (bgWidth - rootWidth) / 2;
                 }
                 else if (this.options.offsetX) {
-                  wiggleRoom = rootWidth - this.$img.width;
-                  bgOffset = wiggleRoom * this.options.offsetX;
+                  wiggleRoom = rootWidth - bgWidth;
+                  bgOffset = 0 - wiggleRoom * this.options.offsetX;
                 }
                 if (bgOffset) {
-                  bgCSS.left = '-' + bgOffset + 'px';
+                  bgCSS.left = 0 - bgOffset + 'px';
                 }
             }
 
@@ -260,6 +304,22 @@
         return this;
       }
 
+        , updateCaption: function (existingIndex, newIndex) {
+            var self = this,
+                existingSrc = self.images[existingIndex].src
+                            + self.options.dataCaptionIndexSeparator
+                            + existingIndex,
+                newSrc = self.images[newIndex].src
+                            + self.options.dataCaptionIndexSeparator
+                            + newIndex;
+            $('[data-' + self.options.dataCaption + '="' + existingSrc + '"]')
+                .fadeOut(200, function() {
+                    $(this).addClass(self.options.captionHideClass);
+                    $('[data-' + self.options.dataCaption + '="' + newSrc + '"]')
+                        .fadeIn(200)
+                        .removeClass(self.options.captionHideClass);
+                });
+        }
       // Show the slide at a certain position
     , show: function (newIndex) {
 
@@ -270,6 +330,7 @@
 
         // Vars
         var self = this
+                , currentIndex = this.index
           , oldImage = self.$wrap.find('img').addClass('deleteable')
           , evtOptions = { relatedTarget: self.$container[0] };
 
@@ -277,11 +338,17 @@
         self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
 
         // Set the new index
-        this.index = newIndex;
+        self.index = newIndex;
 
         // Pause the slideshow
         clearInterval(self.interval);
 
+            if (self.imagesContainCaption()) {
+                self.updateCaption(
+                    currentIndex,
+                    self.index
+                );
+            }
         // New image
         self.$img = $('<img />')
                       .css(styles.img)
@@ -315,7 +382,11 @@
                       .appendTo(self.$wrap);
 
         // Hack for IE img onload event
+            if (!self.imagesContainCaption()) {
         self.$img.attr('src', self.images[newIndex]);
+            } else {
+                self.$img.attr('src', self.images[newIndex].src);
+            }
         return self;
       }
 
@@ -370,6 +441,27 @@
           this.$wrap.remove();          
         }
         this.$container.removeData('backstretch');
+      }
+
+    , imagesContainCaption: function () {
+        // Check that images is an object and not a string
+        return (typeof this.images[0] === 'object');
+      }
+
+    , appendCaption: function (index, src, content) {
+
+        var caption = '<div style="display: none;" data-';
+            caption += this.options.dataCaption;
+            caption += '="';
+            caption += src + this.options.dataCaptionIndexSeparator + index;
+            caption += '"';
+            caption += index != 0 ? ' class="' + this.options.captionHideClass + '"' : '';
+            caption += '>';
+            caption += content;
+            caption += '</div>';
+
+        $(this.options.captionAppendTo).append(caption);
+
       }
   };
 
