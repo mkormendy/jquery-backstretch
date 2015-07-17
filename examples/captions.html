@@ -4,7 +4,7 @@
 	<meta charset="utf-8" />
 	<style>
 	    body { font-family: Helvetica, Arial, sans-serif; line-height: 1.3em; -webkit-font-smoothing: antialiased; }
-	    #wrapper,
+	    #wrapper div,
       .container {
 	        width: 90%;
 	        margin: 20px auto;
@@ -15,6 +15,8 @@
         font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
         font-size: 10px;
         color: #333;
+        height: 300px;
+        overflow-y: auto;
         -webkit-border-radius: 3px;
         -moz-border-radius: 3px;
         border-radius: 3px;
@@ -35,11 +37,27 @@
     [
       {
         &quot;src&quot; : &quot;coffee.jpg&quot;,
-        &quot;caption&quot; : &quot;&lt;h1&gt;Coffee machine&lt;/h1&gt;&lt;p&gt;Can you smell the richness?&lt;/p&gt;&quot;
+        &quot;caption&quot; : &quot;&lt;h1&gt;Coffee machine&lt;/h1&gt;&lt;p&gt;Can you smell the richness?&lt;/p&gt;&quot;,
+        &quot;offsetX&quot; : 1,
+        &quot;offsetY&quot; : 0
+      },
+      {
+        &quot;src&quot; : &quot;cartesian.jpg&quot;,
+        &quot;caption&quot; : &quot;&lt;h1&gt;Cartesian&lt;/h1&gt;&lt;p&gt;Two dimensional grid.&lt;/p&gt;&quot;,
+        // &quot;offsetX&quot; : 1,
+        // &quot;offsetY&quot; : 0
+      },
+      {
+        &quot;src&quot; : &quot;dome.jpg&quot;,
+        // No caption!
+        &quot;offsetX&quot; : 0,
+        &quot;offsetY&quot; : 1
       },
       {
         &quot;src&quot; : &quot;pot-holder.jpg&quot;,
-        &quot;caption&quot; : &quot;&lt;h3&gt;Pot Placemat&lt;/h3&gt;&lt;p&gt;Save your table cloth.&lt;/p&gt;&quot;
+        &quot;caption&quot; : &quot;&lt;h3&gt;Pot Placemat&lt;/h3&gt;&lt;p&gt;Save your table cloth.&lt;/p&gt;&quot;,
+        &quot;offsetX&quot; : 0,
+        &quot;offsetY&quot; : 1
       }
     ],
     {
@@ -58,11 +76,27 @@
     [
       {
         "src" : "coffee.jpg",
-        "caption" : "<h1>Coffee machine</h1><p>Can you smell the richness?</p>"
+        "caption" : "<h1>Coffee machine</h1><p>Can you smell the richness?</p>",
+        "offsetX" : 1,
+        "offsetY" : 0
+      },
+      {
+        "src" : "cartesian.jpg",
+        "caption" : "<h1>Cartesian</h1><p>Two dimensional grid.</p>",
+        // "offsetX" : 1,
+        // "offsetY" : 0
+      },
+      {
+        "src" : "dome.jpg",
+        // No caption!
+        "offsetX" : 0,
+        "offsetY" : 1
       },
       {
         "src" : "pot-holder.jpg",
-        "caption" : "<h3>Pot Placemat</h3><p>Save your table cloth.</p>"
+        "caption" : "<h3>Pot Placemat</h3><p>Save your table cloth.</p>",
+        "offsetX" : 0,
+        "offsetY" : 1
       }
     ],
     {
