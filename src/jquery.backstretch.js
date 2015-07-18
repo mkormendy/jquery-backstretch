@@ -17,7 +17,6 @@
  * http://ssdtutorials.com
  *
  */
-
 ;(function ($, window, undefined) {
     'use strict';
 
@@ -166,43 +165,32 @@
          * Lazy-Loading or Pre-loading
          */
         if (options.lazyload && self.images[self.options.start]) {
-            console.log('lazyloading images');
             $.each(self.images, function (key, value) {
                 // check if the slides are objects with individual options
                 if (typeof self.images[key] === 'object') {
-                    console.log(key+': yes object');
                     $('<img />')[0].src = self.images[self.options.start].src;
                     if (typeof self.images[key].caption !== 'undefined') {
-                        console.log(key+': yes caption');
                         self.appendCaption(key, value.src, value.caption);
                     }
                     else {
-                        console.log(key+': no caption');
                         self.appendCaption(key, value.src, '');
                     }
                 }
                 else {
-                    console.log(key+': not object');
-                    console.log(key+': no caption');
                     $('<img />')[0].src = self.images[self.options.start];
                 }
             });
         }
         else {
-            console.log('preloading images');
             $.each(self.images, function (key, value) {
                 // check if the slides are objects with individual options
                 if (typeof self.images[key] === 'object') {
-                    console.log(key+': yes object');
                     $('<img />')[0].src = value.src;
                     if (typeof self.images[key].caption !== 'undefined') {
-                        console.log(key+': yes caption');
                         self.appendCaption(key, value.src, value.caption);
                     }
                 }
                 else {
-                    console.log(key+': not object');
-                    console.log(key+': no caption');
                     $('<img />')[0].src = this;
                 }
             });
@@ -226,19 +214,19 @@
 
         // Non-body elements need some style adjustments
         if (!self.isBody) {
-          // If the container is statically positioned, we need to make it relative,
-          // and if no zIndex is defined, we should set it to zero.
-          var position = self.$container.css('position')
+            // If the container is statically positioned, we need to make it relative,
+            // and if no zIndex is defined, we should set it to zero.
+            var position = self.$container.css('position')
               , zIndex = self.$container.css('zIndex');
-
-          self.$container.css({
-              position: position === 'static' ? 'relative' : position
-            , zIndex: zIndex === 'auto' ? 0 : zIndex
-            , background: 'none'
-          });
-          
-          // Needs a higher z-index
-          self.$wrap.css({zIndex: -999998});
+  
+            self.$container.css({
+                position: position === 'static' ? 'relative' : position
+              , zIndex: zIndex === 'auto' ? 0 : zIndex
+              , background: 'none'
+            });
+            
+            // Needs a higher z-index
+            self.$wrap.css({zIndex: -999998});
         }
 
         // Fixed or absolute positioning?
@@ -251,26 +239,27 @@
         self.show(self.index);
 
         // Listen for resize
-        $(window).on('resize.backstretch', $.proxy(self.resize(), self))
+        $(window).on('resize.backstretch', $.proxy(self.resize, self))
                  .on('orientationchange.backstretch', $.proxy(function () {
+
                     // Need to do this in order to get the right window height
                     if (self.isBody && window.pageYOffset === 0) {
                       window.scrollTo(0, 1);
                       self.resize;
                     }
                  }, self));
+
     };
 
     /* PUBLIC METHODS
      * ========================= */
     Backstretch.prototype = {
 
-        resize: function (newIndex) {
-
-            console.log('my newIndex: '+newIndex);
+        resize: function () {
 
             try {
                 var self = this
+                  , newIndex = self.index
                   , bgCSS = {left: 0, top: 0}
                   , landscape = (Math.ceil(window.innerWidth / window.innerHeight) > Math.ceil(screen.width / screen.height))
                   , rootWidth = this.isBody ? (isMobile ? (landscape ? screen.height : screen.width) : this.$root.width()) : this.$root.innerWidth()
@@ -278,25 +267,20 @@
                   , rootHeight = this.isBody ? (isMobile ? (landscape ? screen.width : screen.height) : (window.innerHeight ? window.innerHeight : this.$root.height() )) : this.$root.innerHeight()
                   , bgHeight = bgWidth / this.$img.data('ratio')
                   , bgOffset
-                  , wiggleRoom;
-
-                    // Set the new index
-                    self.index = newIndex;
-
-                    var optionsType = self.images[newIndex] ? self.images[newIndex] : this.options;
-
+                  , wiggleRoom
+                  , optionsType = (typeof self.images[newIndex] === 'object') ? self.images[newIndex] : this.options;
+                    
                     // Fixes triggering of resize before image ratio is known (iOS 6 at least)
                     if (isNaN(bgHeight)) {
                         return this;
                     }
-                    // console.log('self.images[newIndex].src: '+self.images[newIndex].src);
+
                     // Make adjustments based on image ratio
                     if (bgHeight >= rootHeight) {
-                        if (this.options.centeredY && typeof this.options.offsetY === 'undefined' && typeof self.images[newIndex].offsetY === 'undefined') {
+                        if (this.options.centeredY && typeof optionsType.offsetY === 'undefined') {
                             bgOffset = (bgHeight - rootHeight) / 2;
                         }
-                        else if (optionsType.offsetY ) {
-
+                        else if (optionsType.offsetY) {
                             wiggleRoom = rootHeight - bgHeight;
                             bgOffset = 0 - wiggleRoom * optionsType.offsetY;
                         }
@@ -306,7 +290,7 @@
                     } else {
                         bgHeight = rootHeight;
                         bgWidth = bgHeight * this.$img.data('ratio');
-                        if (this.options.centeredX && typeof this.options.offsetX === 'undefined' && typeof self.images[newIndex].offsetX === 'undefined') {
+                        if (this.options.centeredX && typeof optionsType.offsetX === 'undefined') {
                             bgOffset = (bgWidth - rootWidth) / 2;
                         }
                         else if (optionsType.offsetX) {
@@ -318,14 +302,14 @@
                         }
                     }
 
+                    // Resize the wrapper and the image based on the above calculations
                     this.$wrap.css({width: rootWidth, height: rootHeight})
                               .find('img:not(.deleteable)').css({width: bgWidth, height: bgHeight}).css(bgCSS);
             } catch(err) {
                 // IE7 seems to trigger resize before the image is loaded.
                 // This try/catch block is a hack to let it fail gracefully.
             }
-
-            return this;
+            
         }
 
         // Show the slide at a certain position
@@ -342,15 +326,11 @@
               , oldImage     = self.$wrap.find('img').addClass('deleteable')
               , evtOptions   = { relatedTarget: self.$container[0] };
 
-            console.log('currentIndex: '+currentIndex);
-
             // Trigger the "before" event
             self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
 
             // Set the new index
             self.index = newIndex;
-
-            console.log('self.index: '+self.index);
 
             // Pause the slideshow
             clearInterval(self.interval);
@@ -397,7 +377,6 @@
                         .appendTo(self.$wrap);
 
             // Hack for IE img onload event
-
             if (typeof self.images[newIndex] !== 'object') {
                 self.$img.attr('src', self.images[newIndex]);
             }
