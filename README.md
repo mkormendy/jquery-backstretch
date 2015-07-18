@@ -183,6 +183,12 @@ $(window).on("backstretch.after", function (e, instance, index) {
 
 ## Changelog
 
+###Version 2.4
+* Combined capabilities for lazy-loading, offset functionality and captions
+
+###Version 2.3
+* Added caption functionality.
+
 ###Version 2.2
 * Added offset functionality
 

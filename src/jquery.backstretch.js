@@ -5,6 +5,7 @@
  * Copyright (c) 2013 Scott Robbin
  * Licensed under the MIT license.
  *
+ * Fork Version: 2.4
  * Fork Maintained By:
  * Mike Kormendy
  * https://github.com/mkormendy/jquery-backstretch
