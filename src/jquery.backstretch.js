@@ -96,6 +96,7 @@
         , dataCaption: 'bootstrap-image'
         , dataCaptionIndexSeparator: '_'
         , captionHideClass: 'hide'
+        , captionAlign: 'topleft'
     };
 
     /* STYLES
@@ -450,7 +451,7 @@
                 caption += '="';
                 caption += src + this.options.dataCaptionIndexSeparator + index;
                 caption += '"';
-                caption += index != 0 ? ' class="' + this.options.captionHideClass + '"' : '';
+                caption += index != 0 ? ' class="' + this.options.captionHideClass + ' ' + this.options.captionAlign + '"' : '';
                 caption += '>';
                 caption += content;
                 caption += '</div>';

@@ -36,63 +36,60 @@ Include the jQuery library (version 1.7 or newer) and Backstretch plugin files i
 </script>
 ```
 ## Per Frame Slideshow Settings
+
 The following examples show per frame slideshow settings.
 
 ### Captions and Offset
 
-Each frame can have custom text (even most HTML) for each frame. As well each image can have custom image offset settings.
+Each frame can have custom text (or HTML) for each frame. As well each image can have custom image offset settings. You can style the captions
 
-```html
-<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-<script src="jquery.backstretch.min.js"></script>
-<script>
-    // To attach Backstrech as the body's background
-    $.backstretch(
-    	 [
-            {
-                "src" : "path/to/image.jpg",
-                "caption" : "<h1>Image caption goes here</h1>"
-            }
-    	 ]
-    );
-
-    // Attach Backstretch to a block-level element and have the image offset
-    $(".foo").backstretch(
-        [
-            {
-                "src" : "path/to/image.jpg",
-                "caption" : "<h1>Image caption goes here</h1>",
-                "offsetX" : 0.7,
-                "offsetY" : 0.3
-            }
-        ]
-    );
-
-    // A complex example, slideshow, offsets that appends the captions to a specific element ID 
-    $(".foo").backstretch(
-        [
-            {
-                "src" : "path/to/image.jpg",
-                "caption" : "<h1>Image caption goes here</h1>"
-            },
-            {
-                "src" : "path/to/image2.jpg",
-                // no caption!
-                "offsetX" : 0,
-                "offsetY" : 1
-            },
-            {
-               "src" : "path/to/image3.jpg",
-               "caption" : "<h1>Image 3 caption goes here</h1>"
-            }
-        ],
+```javascript
+// To attach Backstrech as the body's background
+$.backstretch(
+	 [
         {
-            fade: 750,
-            duration: 4000,
-            captionAppendTo: '#wrapper'
+            "src" : "path/to/image.jpg",
+            "caption" : "<h1>Image caption goes here</h1>"
         }
-    );
-</script>
+	 ]
+);
+
+// Attach Backstretch to a block-level element and have the image offset
+$(".foo").backstretch(
+    [
+        {
+            "src" : "path/to/image.jpg",
+            "caption" : "<h1>Image caption goes here</h1>",
+            "offsetX" : 0.7,
+            "offsetY" : 0.3
+        }
+    ]
+);
+
+// A complex example, slideshow, offsets that appends the captions to a specific element ID 
+$(".foo").backstretch(
+    [
+        {
+            "src" : "path/to/image.jpg",
+            "caption" : "<h1>Image caption goes here</h1>"
+        },
+        {
+            "src" : "path/to/image2.jpg",
+            // no caption!
+            "offsetX" : 0,
+            "offsetY" : 1
+        },
+        {
+           "src" : "path/to/image3.jpg",
+           "caption" : "<h1>Image 3 caption goes here</h1>"
+        }
+    ],
+    {
+        fade: 750,
+        duration: 4000,
+        captionAppendTo: '#wrapper'
+    }
+);
 ```
 
 ## Options
@@ -101,14 +98,14 @@ Each frame can have custom text (even most HTML) for each frame. As well each im
 |------|-------------|------|---------|
 | `caption` | A block of [**quote-escaped**](http://stackoverflow.com/questions/2004168/escape-quotes-in-javascript) text. Accepts most basic HTML (not tested with iFrames, canvas or media tags).<br><small>Credit (sebastiansulinski): [https://github.com/sebastiansulinski/jquery-backstretch](https://github.com/sebastiansulinski/jquery-backstretch)</small> | String | undefined |
 | `captionAppendTo` | Input any standard css selector to target where the captions are appended in place.<br><small>Credit (sebastiansulinski): [https://github.com/sebastiansulinski/jquery-backstretch](https://github.com/sebastiansulinski/jquery-backstretch)</small> | String | body |
-| `offsetX` | Accepts a number between 0 and 1. When 0, the image is offset all the way to the left. When 1, it's all the way to right. When .5, it's centered exactly in the middle (centeredX = true)<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Integer | undefined |
-| `offsetY` | Same as offsetX, only it adjusts the offset along the Y axis (0.5 : centeredY = true).<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Integer | undefined |
+| `offsetX` | Accepts a number between 0 and 1. When 0, the image is offset all the way to the left. When 1, it's all the way to right. When the value is 0.5, it's centered exactly in the middle (the same as centeredX = true)<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Integer | undefined |
+| `offsetY` | Same as offsetX, only it adjusts the offset along the Y axis (again a value of 0.5 is the same as centeredY = true).<br><small>Credit (null-null-null): [https://github.com/null-null-null/jquery-backstretch](https://github.com/null-null-null/jquery-backstretch)</small> | Integer | undefined |
 | `centeredX` | The ratio of the width/height of the image doesn't always jive with the width/height of the window. This parameter controls whether or not we center the image on the X axis to account for the discrepancy. | Boolean | true |
 | `centeredY` | This parameter controls whether or not we center the image on the Y axis to account for the aforementioned discrepancy. | Boolean | true |
 | `fade` | This is the speed at which the image will fade in. Integers in milliseconds are accepted, as well as standard jQuery speed strings (slow, normal, fast). | Integer or String | 0 |
 | `duration` | The amount of time in between slides, when using Backstretch as a slideshow, expressed as the number of milliseconds. | Integer | 5000 |
 | `paused` | For slideshows: Disables the change between slides | Boolean | false |
-| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *Dependent on the time it takes to load your image, the actual duration may vary from the one in the options.* <br><small>Credit (SpazzMarticus): [https://github.com/SpazzMarticus/jquery-backstretch](https://github.com/SpazzMarticus/jquery-backstretch)</small> | Boolean | false |
+| `lazyload` | Activates the lazy-loading-functionality für slideshows. This means the next slide that is about to be shown, is loaded right before showing. *The time it takes to load the next image will increase the standard set duration between itself and the previous image.* <br><small>Credit (SpazzMarticus): [https://github.com/SpazzMarticus/jquery-backstretch](https://github.com/SpazzMarticus/jquery-backstretch)</small> | Boolean | false |
 | `start` | The index of the image in the array you want to start your slideshow with.<br><small>Credit (SpazzMarticus): [https://github.com/SpazzMarticus/jquery-backstretch](https://github.com/SpazzMarticus/jquery-backstretch)</small> | Integer | 0 |
 
 ## Slideshow API
@@ -192,16 +189,20 @@ $(window).on("backstretch.after", function (e, instance, index) {
 ## Changelog
 
 ###Version 2.4
-* Combined capabilities for lazy-loading, offset functionality and captions
+
+* Combined capabilities for lazy-loading, image offset functionality and captions
 
 ###Version 2.3
+
 * Added caption functionality.
 
 ###Version 2.2
+
 * Added offset functionality
 
 
 ###Version 2.1
+
 * Added lazy-loading functionality
 
 ### Version 2.0

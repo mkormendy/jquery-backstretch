@@ -99,7 +99,7 @@
     };
 
     /* STYLES
-     * 
+     *
      * Baked-in styles that we'll apply to our elements.
      * In an effort to keep the plugin simple, these are not exposed as options.
      * That said, anyone can override these in their own stylesheet.
@@ -136,7 +136,7 @@
 
         /**
          *  share access to the object instance from within other functions/methods
-         */ 
+         */
         var self = this;
 
         /* In its simplest form, we allow Backstretch to be called on an image path.
@@ -161,7 +161,7 @@
         if (self.options.start < 0) {
             self.options.start = 0;
         }
-        
+
         /**
          * Lazy-Loading or Pre-loading
          */
@@ -219,13 +219,13 @@
             // and if no zIndex is defined, we should set it to zero.
             var position = self.$container.css('position')
               , zIndex = self.$container.css('zIndex');
-  
+
             self.$container.css({
                 position: position === 'static' ? 'relative' : position
               , zIndex: zIndex === 'auto' ? 0 : zIndex
               , background: 'none'
             });
-            
+
             // Needs a higher z-index
             self.$wrap.css({zIndex: -999998});
         }
@@ -270,7 +270,7 @@
                   , bgOffset
                   , wiggleRoom
                   , optionsType = (typeof self.images[newIndex] === 'object') ? self.images[newIndex] : this.options;
-                    
+
                     // Fixes triggering of resize before image ratio is known (iOS 6 at least)
                     if (isNaN(bgHeight)) {
                         return this;
@@ -310,7 +310,7 @@
                 // IE7 seems to trigger resize before the image is loaded.
                 // This try/catch block is a hack to let it fail gracefully.
             }
-            
+
         }
 
         // Show the slide at a certain position
@@ -328,7 +328,7 @@
               , evtOptions   = { relatedTarget: self.$container[0] };
 
             // Trigger the "before" event
-            self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]); 
+            self.$container.trigger($.Event('backstretch.before', evtOptions), [self, newIndex]);
 
             // Set the new index
             self.index = newIndex;
@@ -351,7 +351,7 @@
                         .bind('load', function (e) {
                             var imgWidth = this.width || $(e.target).width()
                               , imgHeight = this.height || $(e.target).height();
-                            
+
                             // Save the ratio
                             $(this).data('ratio', imgWidth / imgHeight);
 
@@ -435,7 +435,7 @@
 
             // Remove Backstretch
             if(!preserveBackground) {
-              this.$wrap.remove();          
+              this.$wrap.remove();
             }
             this.$container.removeData('backstretch');
         }
@@ -513,23 +513,23 @@
       return !(
         // iOS 4.3 and older : Platform is iPhone/Pad/Touch and Webkit version is less than 534 (ios5)
         ((platform.indexOf( "iPhone" ) > -1 || platform.indexOf( "iPad" ) > -1  || platform.indexOf( "iPod" ) > -1 ) && wkversion && wkversion < 534) ||
-        
+
         // Opera Mini
         (window.operamini && ({}).toString.call( window.operamini ) === "[object OperaMini]") ||
         (operammobilematch && omversion < 7458) ||
-        
+
         //Android lte 2.1: Platform is Android and Webkit version is less than 533 (Android 2.2)
         (ua.indexOf( "Android" ) > -1 && wkversion && wkversion < 533) ||
-        
+
         // Firefox Mobile before 6.0 -
         (ffversion && ffversion < 6) ||
-        
+
         // WebOS less than 3
         ("palmGetResource" in window && wkversion && wkversion < 534) ||
-        
+
         // MeeGo
         (ua.indexOf( "MeeGo" ) > -1 && ua.indexOf( "NokiaBrowser/8.5.0" ) > -1) ||
-        
+
         // IE6
         (ieversion && ieversion <= 6)
       );
